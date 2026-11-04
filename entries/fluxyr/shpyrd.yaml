@@ -1,0 +1,50 @@
+# Fluxyr: a Flask-compatible Python framework for agents, skills and
+# durable execution, with its own web UI. The upstream repository ships
+# a Dockerfile that runs as its own user; the catalog adds nothing to it.
+catalog:
+  name: Fluxyr
+  description: A Python framework for agents, skills and durable execution, with its own web UI.
+  category: agents
+  tags: [agent, python, llm]
+  icon: message-square
+  color: teal
+  publisher: shpyrd
+  license: MPL-2.0
+  homepage: https://github.com/shpyrd-io/fluxyr
+  source:
+    git: https://github.com/shpyrd-io/fluxyr
+    revision: main
+  inputs:
+    - name: FLUXYR_MODEL
+      label: Model
+      help: The model the agent answers with, as OpenRouter names it.
+      default: minimax/minimax-m3
+    - name: OPENROUTER_API_KEY
+      label: OpenRouter API key
+      help: From openrouter.ai/keys. Kept as a secret of the project.
+      secret: true
+      required: true
+    - name: FLUXYR_AGENT_NAME
+      label: Agent name
+      help: How the agent introduces itself.
+      default: Fluxyr
+    # The key that seals the agent's vault. Made at install and kept with
+    # the project's secrets: lost with a fresh container otherwise.
+    - name: VAULT_ENCRYPTION_KEY
+      label: Vault key
+      secret: true
+      generate: 32
+  volumes:
+    - name: data
+      size: 5Gi
+processes:
+  web:
+    port: 5050
+    volumes:
+      - name: data
+        path: /var/lib/fluxyr
+build:
+  strategy: dockerfile
+env:
+  FLUXYR_HOST: 0.0.0.0
+  FLUXYR_ROOT: /var/lib/fluxyr

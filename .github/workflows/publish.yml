@@ -1,0 +1,50 @@
+name: publish
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# The CLI the catalog is validated and published with. A commit of
+# shpyrd-io/shpyrd until a release carries `shpyrd catalog`; then `latest`.
+env:
+  SHPYRD_VERSION: bcf990b46f97d03b5daf5d520ee1944aefc18478
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: Install the shpyrd CLI
+        run: go install github.com/shpyrd-io/shpyrd/cmd/shpyrd@${{ env.SHPYRD_VERSION }}
+      - name: Validate the entries
+        run: shpyrd catalog validate entries
+      - name: Publish the index
+        run: shpyrd catalog publish entries --out public
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name == 'push'
+        with:
+          path: public
+
+  deploy:
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
