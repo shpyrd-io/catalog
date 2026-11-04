@@ -27,6 +27,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: stable
+          cache: false   # no go.sum here: the CLI is installed, not built
       - name: Install the shpyrd CLI
         run: go install github.com/shpyrd-io/shpyrd/cmd/shpyrd@${{ env.SHPYRD_VERSION }}
       - name: Validate the entries
