@@ -5,10 +5,10 @@ on:
     branches: [main]
   pull_request:
 
-# The CLI the catalog is validated and published with. A commit of
-# shpyrd-io/shpyrd until a release carries `shpyrd catalog`; then `latest`.
+# The CLI the catalog is validated and published with: the latest release
+# of shpyrd-io/shpyrd (v1.6.0 was the first with `shpyrd catalog`).
 env:
-  SHPYRD_VERSION: bcf990b46f97d03b5daf5d520ee1944aefc18478
+  SHPYRD_VERSION: latest
 
 permissions:
   contents: read
