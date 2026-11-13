@@ -15,13 +15,6 @@ catalog:
   source:
     git: https://github.com/shpyrd-io/hermes
     revision: main
-  inputs:
-    # Optional: with it, the setup screen offers OpenRouter without asking
-    # the key again. Hermes reads it from the environment.
-    - name: OPENROUTER_API_KEY
-      label: OpenRouter API key
-      help: Optional. From openrouter.ai/keys; the setup screen can take it later instead. Kept as a secret of the project.
-      secret: true
   volumes:
     - name: data
       size: 10Gi
