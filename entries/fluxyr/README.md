@@ -10,8 +10,10 @@ and scheduled routines. It ships its own web UI.
 - A `web` process on port 5050, built from the repository's own Dockerfile.
 - A 5Gi disk at `/var/lib/fluxyr`, where the agent keeps its state, its
   SQLite database and its skills.
-- The config vars: your OpenRouter key (a secret), the model, the agent's
-  name, and a vault key generated at install.
+- The config vars: the agent's name and a vault key generated at install.
+  An OpenRouter key and a model may be given too; otherwise the first
+  visit asks for the provider, the key and the model, and keeps them in
+  the agent's own Vault and settings.
 
 ## After the install
 
