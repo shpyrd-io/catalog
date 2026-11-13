@@ -23,10 +23,11 @@ catalog:
 processes:
   web:
     port: 8080
-    # The Node gateway with its plugins holds about 1.4 GiB resident at
-    # rest; the 64Mi default kills it, and so does 1Gi.
+    # The Node gateway with its plugins holds about 1.6 GiB resident at
+    # rest and more in a conversation: at 2Gi it was killed for running
+    # out of memory three times in an hour.
     size: shared-xl
-    memory: 2Gi
+    memory: 4Gi
     volumes:
       - name: data
         path: /data
