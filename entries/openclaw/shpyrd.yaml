@@ -1,0 +1,40 @@
+# OpenClaw, the open-source assistant that answers on WhatsApp, Telegram,
+# Discord and more, packaged for the platform at shpyrd-io/openclaw: the
+# official image with a setup screen in front of its Control UI. The
+# first visit asks the provider, the key and the model; channels are
+# added afterwards, from the Control UI or a shell.
+catalog:
+  name: OpenClaw
+  description: The open-source assistant that answers on WhatsApp, Telegram, Discord and more, with its Control UI. Channels are connected after the install.
+  category: agents
+  tags: [agent, assistant, whatsapp, telegram, discord, node]
+  icon: phone
+  color: red
+  publisher: shpyrd
+  license: MIT
+  homepage: https://openclaw.ai
+  source:
+    git: https://github.com/shpyrd-io/openclaw
+    revision: main
+  inputs:
+    # Optional: with it, the setup screen offers OpenRouter without asking
+    # the key again. OpenClaw reads it from the environment.
+    - name: OPENROUTER_API_KEY
+      label: OpenRouter API key
+      help: Optional. From openrouter.ai/keys; the setup screen can take it later instead. Kept as a secret of the project.
+      secret: true
+  volumes:
+    - name: data
+      size: 10Gi
+processes:
+  web:
+    port: 8080
+    # The Node gateway with its plugins holds about 1.4 GiB resident at
+    # rest; the 64Mi default kills it, and so does 1Gi.
+    size: shared-xl
+    memory: 2Gi
+    volumes:
+      - name: data
+        path: /data
+build:
+  strategy: dockerfile
