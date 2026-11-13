@@ -41,6 +41,8 @@ catalog:
 processes:
   web:
     port: 5050
+    # Python with its worker threads and SQLite: the 64Mi default kills it.
+    size: shared-l
     volumes:
       - name: data
         path: /var/lib/fluxyr
