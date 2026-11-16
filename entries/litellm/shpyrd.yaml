@@ -1,0 +1,58 @@
+# LiteLLM, BerriAI's gateway in front of the model providers, packaged for
+# the platform at shpyrd-io/litellm: the official image with a script that
+# makes LiteLLM's keys from the two values generated here. Models, virtual
+# keys and spend live in the Postgres the install creates. The project's
+# access must be "identified" for LiteLLM's own keys to reach it: the
+# readme says why.
+catalog:
+  name: LiteLLM
+  description: One OpenAI-compatible address in front of 100+ model providers, with virtual keys, budgets, spend tracking and an admin UI.
+  category: ai
+  tags: [llm, gateway, proxy, openai, python]
+  icon: route
+  color: blue
+  publisher: shpyrd
+  license: MIT
+  homepage: https://docs.litellm.ai
+  source:
+    git: https://github.com/shpyrd-io/litellm
+    revision: main
+  inputs:
+    - name: UI_USERNAME
+      label: Admin user
+      help: The name the administrator signs in to the admin UI with.
+      default: admin
+    - name: UI_PASSWORD
+      label: Admin password
+      help: The password of the admin UI. The project is open to the internet, so choose a strong one.
+      secret: true
+      required: true
+    # LiteLLM's master key is made from this, with "sk-" in front: the
+    # administrator's API key.
+    - name: MASTER_KEY_SEED
+      label: Master key seed
+      secret: true
+      generate: 32
+    # The key that encrypts the provider keys kept in the database. Made
+    # at install and kept with the project's secrets: it must never
+    # change once a model is added.
+    - name: SALT_KEY_SEED
+      label: Salt key seed
+      secret: true
+      generate: 32
+  resources:
+    - kind: postgres
+      name: db
+processes:
+  web:
+    port: 4000
+    # LiteLLM asks for 1 CPU and 4Gi per instance, and calls 4Gi a floor.
+    size: shared-xl
+    memory: 4Gi
+    # Answers without a key, and only once the proxy is up; the first
+    # start also runs the database migrations.
+    healthCheck:
+      path: /health/liveliness
+      gracePeriod: 120s
+build:
+  strategy: dockerfile
