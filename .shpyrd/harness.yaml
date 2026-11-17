@@ -1,0 +1,5 @@
+prefix: catalog
+visibility: public
+verify:
+  static:
+    - "go run github.com/shpyrd-io/shpyrd/cmd/shpyrd@latest catalog validate entries"
