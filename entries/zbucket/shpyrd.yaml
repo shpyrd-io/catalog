@@ -20,9 +20,8 @@ catalog:
       name: db
       spec:
         version: "17"
+        size: shared-l
         storage: 5Gi
-        backups:
-          retention: 7d
 processes:
   web:
     size: shared-l

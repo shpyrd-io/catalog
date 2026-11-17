@@ -9,9 +9,11 @@ explicit permissions.
 
 ## What the install makes
 
-- A PostgreSQL 17 database (`db`, 5 GiB, daily backups kept seven days),
-  attached as `DATABASE_URL`. The platform's databases carry pgvector,
-  which Knowledge uses for semantic search.
+- A PostgreSQL 17 database (`db`, size shared-l, 5 GiB), attached as
+  `DATABASE_URL`. The platform's databases carry pgvector, which Knowledge
+  uses for semantic search. Backups are not turned on by the entry, since
+  they need the cluster's object storage; where it has one (shpyrd cloud
+  does), turn them on with `shpyrd pg backups enable db --project <slug>`.
 - Three processes from the repository's `Procfile`: `web` (the UI and
   API), `worker` (ingestion, retention, indexing) and `funnels` (durable
   funnel runs). Each release migrates the database and imports the
