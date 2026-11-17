@@ -35,9 +35,17 @@ build:
   strategy: dockerfile
 ```
 
+An entry that needs a database or a store names it under `resources`
+(`kind: postgres`, `redis`, `objectbucket`, with the `spec` the resources
+API takes: a version, a storage size, backups); the install creates it in
+the project and attaches it, so its variables reach the processes. See
+[`entries/zbucket`](entries/zbucket/shpyrd.yaml).
+
 Beside the `shpyrd.yaml`: a `README.md`, shown on the entry's page; an
-`icon.svg` (or `.png`, `.webp`) for its card; and any other file is the
-**overlay**, laid over the upstream checkout before the build. That is how
+`icon.svg` (or `.png`, `.webp`), drawn on the entry's card and copied to
+the project at install, so the launcher shows the same image; and any
+other file is the **overlay**, laid over the upstream checkout before the
+build. That is how
 an entry gives a Dockerfile to a project that has none, or a better one.
 An overlay goes with `build.strategy: dockerfile`: the buildpacks builder
 reads one source. Buildpacks are the default build; a Dockerfile is for

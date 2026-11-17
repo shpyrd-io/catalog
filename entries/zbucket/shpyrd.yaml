@@ -1,0 +1,44 @@
+catalog:
+  name: zbucket
+  description: Shared metrics and knowledge for your applications, with dashboards, an API and one integration identity per backend.
+  category: analytics
+  tags: [metrics, dashboards, knowledge, events, api]
+  icon: database
+  color: orange
+  publisher: shpyrd
+  homepage: https://github.com/shpyrd-io/zbucket
+  source:
+    git: https://github.com/shpyrd-io/zbucket
+    revision: main
+  inputs:
+    - name: VOYAGE_API_KEY
+      label: Voyage API key
+      help: Optional. From dash.voyageai.com; turns on semantic search over Knowledge. Without it, Knowledge searches by text and says so.
+      secret: true
+  resources:
+    - kind: postgres
+      name: db
+      spec:
+        version: "17"
+        storage: 5Gi
+        backups:
+          retention: 7d
+processes:
+  web:
+    size: shared-l
+    healthCheck:
+      path: /api/health
+      gracePeriod: 90s
+  worker:
+    size: shared-m
+  funnels:
+    size: shared-m
+build:
+  stack: full
+  env:
+    BP_NODE_VERSION: "24.*"
+    BP_NODE_RUN_SCRIPTS: build
+env:
+  NODE_ENV: production
+  ZBUCKET_ACCESS: shpyrd
+  VOYAGE_MODEL: voyage-4
