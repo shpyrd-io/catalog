@@ -45,8 +45,12 @@ catalog:
       secret: true
       generate: 32
   resources:
+    # The install starts on the shared kind of database, the less costly
+    # one. It can be converted to a dedicated database later.
     - kind: postgres
       name: db
+      spec:
+        type: shared
 processes:
   web:
     port: 4000

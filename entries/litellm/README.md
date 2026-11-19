@@ -7,7 +7,9 @@ team, fallbacks between models, and an admin UI.
 
 The install asks the admin user's name (`admin` unless changed), makes
 the admin password and the keys itself, and creates a Postgres database
-for the project: models, keys and spend live there.
+for the project: models, keys and spend live there. The database is of the
+shared type, the less costly one; it can be converted to a dedicated database
+later with `shpyrd pg convert db --to dedicated`.
 
 After the install, set the project's access to **Named people**
 (`shpyrd access set identified --project litellm`). LiteLLM authenticates
